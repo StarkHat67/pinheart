@@ -1,3 +1,4 @@
+const character = document.querySelector('.character');
 const love = document.querySelector('.love');
 
 const heartMap = [
@@ -12,26 +13,36 @@ const heartMap = [
 ];
 
 const size = 40;
+const originX = 70; // centro do boneco
+const originY = 500;
 
 let delay = 0;
 
-heartMap.forEach((row, y) => {
-  [...row].forEach((cell, x) => {
-    if (cell === "1") {
-      const el = document.createElement("div");
-      el.className = "heart";
-      el.style.left = `20px`; // começa do personagem
-      el.style.top = `300px`;
-      love.appendChild(el);
+// Mostra o boneco depois de 1s
+setTimeout(() => {
+  character.classList.add('show');
 
-      setTimeout(() => {
-        el.style.transition = "all 0.6s ease";
-        el.style.left = `${x * size}px`;
-        el.style.top = `${y * size}px`;
-        el.style.opacity = 1;
-      }, delay);
+  // começa a atirar depois que o boneco aparece
+  heartMap.forEach((row, y) => {
+    [...row].forEach((cell, x) => {
+      if (cell === "1") {
+        setTimeout(() => {
+          const el = document.createElement("div");
+          el.className = "heart";
+          el.style.left = `${originX}px`;
+          el.style.top = `${originY}px`;
+          love.appendChild(el);
 
-      delay += 100; // controla tempo entre "tiros"
-    }
+          // força reflow
+          el.offsetHeight;
+
+          el.style.left = `${x * size}px`;
+          el.style.top = `${y * size}px`;
+          el.style.opacity = 1;
+        }, delay);
+        delay += 100;
+      }
+    });
   });
-});
+
+}, 1000);
